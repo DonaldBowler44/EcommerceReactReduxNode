@@ -21,7 +21,11 @@ const Home = () => {
   //sorting state
   const [sortState, setSortState] = useState('none');
   const [searchTerm, setSearchTerm] = useState('');
-  const [cartProductCount, setCartProductCount] = useState(cart?.products.length || 0);
+  //const [cartProductCount, setCartProductCount] = useState(cart?.products.length || 0);
+
+  // Instead of directly using cart?.products.length, we check if cart is null first
+  //const [cartProductCount, setCartProductCount] = useState(cart ? cart.products.length : 0);
+  const [cartProductCount, setCartProductCount] = useState(cart?.products?.length || 0);
 
   const sortMethods = {
     none: { method: (a, b) => null},
@@ -59,8 +63,15 @@ const Home = () => {
       const taxAmount = cart.totalAmount * 0.0825;
       const totalAmountWithTax = cart.totalAmount + taxAmount;
       setTotalAmountWithTax(totalAmountWithTax);
+
+      // Use optional chaining here to handle the case when cart.products is undefined
+      setCartProductCount(cart.products?.length || 0);
+    } else 
+    {
+      // If cart is null, set cartProductCount to 0
+      setCartProductCount(0);
     }
-    setCartProductCount(cart?.products.length || 0);
+    //setCartProductCount(cart?.products.length || 0);
   }, [cart]);
   
   if (loading) {
